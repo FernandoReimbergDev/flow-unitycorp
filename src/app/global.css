@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+html {
+  overflow-x: hidden;
+}
+
+:root {
+  --backgroudPage: #fb2c36;
+  --cor-secundaria: #ffaa00;
+}
+
+.backgroundPage {
+  background-color: var(--backgroudPage);
+}
+
+.textDestac {
+  color: #155DFC;
+}
