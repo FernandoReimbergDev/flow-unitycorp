@@ -1,17 +1,19 @@
 export type User = {
-    name: string
-    image: string
-    username: string
-}
+  name: string;
+  image: string;
+  username: string;
+};
 
 export type JWTData = {
-    exp: number; // timestamp
+  name: string;
+  image: string;
+  username: string;
+  exp: number; // timestamp
 };
 
 export type AuthContextType = {
-    accessToken: string | null
-    user: User | null
-    signIn: (badge: string) => Promise<boolean>
-    signOut: () => void
-    refreshToken: () => Promise<boolean>
-}
+  accessToken: string | null;
+  user: User | null;
+  signIn: (badge: string) => Promise<boolean>;
+  signOut: () => Promise<void>;
+};

@@ -9,6 +9,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const checkTokenValidity = useCallback((token: string) => {
@@ -30,14 +31,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         credentials: "include",
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type");
 
-      if (res.ok && data.accessToken) {
+      if (!res.ok) {
+        const error = contentType?.includes("application/json") ? await res.json() : await res.text();
+
+        console.error("Erro na autenticação:", error);
+        return false;
+      }
+
+      // garante que só faz .json() se for seguro
+      const data = contentType?.includes("application/json") ? await res.json() : null;
+
+      if (data?.accessToken) {
         setAccessToken(data.accessToken);
         setUser(data.user);
         router.push("/produto");
         return true;
       }
+
       return false;
     } catch (err) {
       console.error("Erro no login:", err);
@@ -58,33 +70,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Busca os dados do usuário sempre que a página for renderizada
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("/api/me", {
-          method: "GET",
-          credentials: "include",
-        });
+    const initializeAuth = async () => {
+      setIsLoading(true);
 
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        } else if (res.status === 401) {
-          // Usuário não autenticado — normal ao abrir app sem login
-          console.info("Usuário ainda não autenticado.");
-          setUser(null);
+      try {
+        // Verifica se há um userToken nos cookies (pode ser lido pelo JavaScript)
+        const userToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("userToken="))
+          ?.split("=")[1];
+
+        if (userToken && checkTokenValidity(userToken)) {
+          // Decodifica o userToken para obter os dados do usuário
+          const decoded = jwtDecode<JWTData>(userToken);
+          setUser({
+            name: decoded.name,
+            image: decoded.image,
+            username: decoded.username,
+          });
+          setAccessToken(userToken);
         } else {
-          console.warn("Erro inesperado ao buscar usuário:", res.status);
+          console.info("Usuário não autenticado ou token expirado.");
           setUser(null);
+          setAccessToken(null);
         }
       } catch (err) {
-        console.error("Erro ao buscar usuário:", err);
+        console.error("Erro ao verificar autenticação:", err);
         setUser(null);
+        setAccessToken(null);
       }
+
+      setIsLoading(false);
     };
 
-    fetchUser();
-  }, []);
+    initializeAuth();
+  }, [checkTokenValidity]);
 
   useEffect(() => {
     if (!accessToken) return;
@@ -99,39 +121,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [accessToken, signOut, checkTokenValidity]);
 
-  const refreshToken = async (): Promise<boolean> => {
-    try {
-      const res = await fetch("/api/refresh");
+  // Não renderiza o conteúdo até que a verificação inicial seja concluída
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  }
 
-      // 💡 Se status 204 (sem conteúdo), não tente fazer .json()
-      if (res.status === 204) {
-        setUser(null);
-        return false;
-      }
-
-      // 💡 Se Content-Type não for JSON, evite .json()
-      const contentType = res.headers.get("content-type");
-      if (!res.ok || !contentType?.includes("application/json")) {
-        return false;
-      }
-
-      const data = await res.json();
-
-      if (data.accessToken) {
-        setAccessToken(data.accessToken);
-        return true;
-      }
-
-      return false;
-    } catch (err) {
-      console.error("Erro ao buscar usuário:", err);
-      return false;
-    }
-  };
-
-  return (
-    <AuthContext.Provider value={{ accessToken, user, signIn, signOut, refreshToken }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ accessToken, user, signIn, signOut }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextType => {

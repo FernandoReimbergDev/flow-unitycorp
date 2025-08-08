@@ -10,8 +10,8 @@ export async function PUT(req: NextRequest) {
     const { chavePedPro, chaveSitPro, dataProducao } = await req.json();
     const cookieStore = await cookies();
 
-    // Pega o refresh_token do cookie HttpOnly
-    const refreshToken = cookieStore.get("refresh_token")?.value;
+    // Pega o refreshToken do cookie HttpOnly
+    const refreshToken = cookieStore.get("refreshToken")?.value;
 
     if (!refreshToken) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
