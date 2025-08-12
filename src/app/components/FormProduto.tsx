@@ -8,6 +8,7 @@ import { ScanBarcode, Barcode } from "lucide-react";
 import { InputField, InputIcon, InputRoot } from "./Input";
 import { frasesMotivacionais } from "../utils/fnUtils";
 import { useAuth } from "../../context/AuthContext";
+import "./style.css";
 
 type ResultadoPedido = {
   pathPedPath?: string;
