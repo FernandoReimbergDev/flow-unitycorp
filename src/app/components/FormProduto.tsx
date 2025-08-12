@@ -432,6 +432,47 @@ export function Produto() {
                               ref={inputRefSit}
                             />
                           </InputRoot>
+                          {material && (
+                            <div className="grid grid-cols-2 w-full gap-4">
+                              <div className="flex flex-col w-full">
+                                <p className="text-nowrap">Local do Material:</p>
+                                <InputRoot data-error={mensagemPed.length > 1}>
+                                  <InputField
+                                    type="text"
+                                    placeholder="Digite o Local do Material"
+                                    onChange={(e) => setLocalMaterial(e.target.value)}
+                                  />
+                                </InputRoot>
+                              </div>
+                              <div className="flex flex-col w-full">
+                                <p className="text-nowrap">Local das Embalagens e Acessorios:</p>
+                                <InputRoot data-error={mensagemPed.length > 1}>
+                                  <InputField
+                                    type="text"
+                                    placeholder="Digite o Local das Embalagens e Acessorios"
+                                    onChange={(e) => setEmbalagem(e.target.value)}
+                                  />
+                                </InputRoot>
+                              </div>
+                              <div className="flex flex-col w-full">
+                                <p className="text-nowrap">Quantidade Conferida:</p>
+                                <InputRoot data-error={mensagemPed.length > 1}>
+                                  <InputField
+                                    type="number"
+                                    placeholder="0"
+                                    onChange={(e) => setQuantidadeConferida(Number(e.target.value))}
+                                  />
+                                </InputRoot>
+                              </div>
+                              <button
+                                onClick={fazerSubmitLocalDoMaterial}
+                                className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-4 self-end rounded mt-4 cursor-pointer"
+                                type="submit"
+                              >
+                                Confirmar
+                              </button>
+                            </div>
+                          )}
                           {mensagemSit && <p className="text-red-500 font-[700] font-poppins">{mensagemSit}</p>}
                         </div>
 
@@ -455,47 +496,7 @@ export function Produto() {
                             </button>
                           </div>
                         )}
-                        {material && (
-                          <div className="flex flex-col w-full gap-4">
-                            <div className="flex flex-col w-full">
-                              <p className="text-nowrap">Local do Material:</p>
-                              <InputRoot data-error={mensagemPed.length > 1}>
-                                <InputField
-                                  type="text"
-                                  placeholder="Digite o Local do Material"
-                                  onChange={(e) => setLocalMaterial(e.target.value)}
-                                />
-                              </InputRoot>
-                            </div>
-                            <div className="flex flex-col w-full">
-                              <p className="text-nowrap">Local das Embalagens e Acessorios:</p>
-                              <InputRoot data-error={mensagemPed.length > 1}>
-                                <InputField
-                                  type="text"
-                                  placeholder="Digite o Local das Embalagens e Acessorios"
-                                  onChange={(e) => setEmbalagem(e.target.value)}
-                                />
-                              </InputRoot>
-                            </div>
-                            <div className="flex flex-col w-full">
-                              <p className="text-nowrap">Quantidade Conferida:</p>
-                              <InputRoot data-error={mensagemPed.length > 1}>
-                                <InputField
-                                  type="number"
-                                  placeholder="0"
-                                  onChange={(e) => setQuantidadeConferida(Number(e.target.value))}
-                                />
-                              </InputRoot>
-                            </div>
-                            <button
-                              onClick={fazerSubmitLocalDoMaterial}
-                              className="bg-blue-500 text-white px-4 py-2 rounded mt-4 cursor-pointer"
-                              type="submit"
-                            >
-                              Confirmar
-                            </button>
-                          </div>
-                        )}
+
                         {isLoading && (
                           <div className="flex justify-center items-center gap-2">
                             <div className="w-8 h-8 border-4 border-red-400 border-t-transparent rounded-full animate-spin" />

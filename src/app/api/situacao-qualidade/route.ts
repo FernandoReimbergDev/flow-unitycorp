@@ -45,7 +45,7 @@ export async function PUT(req: NextRequest) {
         chavePed: body.chavePed,
         descrGrupoFollowUp: DESCR_GRUPO_FOLLOWUP,
         descrFollowUp: `MATERIAL REVISADO - ${body.codPro} ${body.corPedPro}`,
-        obsFollowUp: `Produto ${body.codPro} - Cor: ${body.corPedPro} - Qtd Conferida: ${body.quantidadeConferida}\nLocal: ${body.localProduto}\nAcessorios/Embalagem: ${body.localEmbalagem} `,
+        obsFollowUp: `PRODUTO ${body.codPro} - COR: ${body.corPedPro} - QTD CONFERIDA: ${body.quantidadeConferida}\nLOCAL: ${body.localProduto}\nACESSORIOS/EMBALAGEM: ${body.localEmbalagem} `,
         destFollowUp: DEST_FOLLOWUP,
         feedBackFollowUp: FEEDBACK_FOLLOWUP,
         plataformaFollowUp: PLATAFORMA_FOLLOWUP,
