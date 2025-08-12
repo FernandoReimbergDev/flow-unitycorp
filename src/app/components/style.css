@@ -1,0 +1,8 @@
+.compatible_button {
+    background-color: #099ed9;
+    color: white;
+}
+
+.compatible_button:hover {
+    background-color: #2296c5;
+}

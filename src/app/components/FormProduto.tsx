@@ -466,7 +466,7 @@ export function Produto() {
                               </div>
                               <button
                                 onClick={fazerSubmitLocalDoMaterial}
-                                className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-4 self-end rounded mt-4 cursor-pointer"
+                                className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-4 self-end rounded mt-4 cursor-pointer compatible_button"
                                 type="submit"
                               >
                                 Confirmar
@@ -489,7 +489,7 @@ export function Produto() {
                             />
                             <button
                               onClick={fazerSubmitComData}
-                              className="bg-blue-500 text-white px-4 py-2 rounded mt-4 cursor-pointer"
+                              className="bg-blue-500 text-white px-4 py-2 rounded mt-4 cursor-pointer compatible_button"
                               type="submit"
                             >
                               Confirmar Data
@@ -498,9 +498,9 @@ export function Produto() {
                         )}
 
                         {isLoading && (
-                          <div className="flex justify-center items-center gap-2">
+                          <div className="flex justify-center items-center gap-2 absolute bottom-4">
                             <div className="w-8 h-8 border-4 border-red-400 border-t-transparent rounded-full animate-spin" />
-                            <p>Carregando...</p>
+                            <p className="font-bold font-poppins">Carregando...</p>
                           </div>
                         )}
                       </div>
